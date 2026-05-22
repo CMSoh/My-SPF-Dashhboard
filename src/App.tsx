@@ -103,9 +103,54 @@ const parseRow = (row: any): { report?: ReportItem; license?: LicenseApplication
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<MainTab>('services');
-  const [currentView, setCurrentView] = useState<CurrentView>('home');
+  // Initialization of states from URL/Query Parameters first to prevent the initial "landing clickback"
+  const [activeTab, setActiveTab] = useState<MainTab>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam && ['services', 'traffic', 'licences', 'documents', 'social'].includes(tabParam)) {
+        return tabParam as MainTab;
+      }
+    }
+    return 'services';
+  });
+
+  const [currentView, setCurrentView] = useState<CurrentView>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const viewParam = params.get('view');
+      const validViews = [
+        'home', 'report_portal', 'scam_report', 'apply_permits', 
+        'submit_info', 'check_status', 'book_appointment', 'practice_tests', 'social'
+      ];
+      if (viewParam && validViews.includes(viewParam)) {
+        return viewParam as CurrentView;
+      }
+    }
+    return 'home';
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Synchronize state changes to URL query params to preserve them during "Open in new Tab" or iframe updates
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      let changed = false;
+      if (params.get('view') !== currentView) {
+        params.set('view', currentView);
+        changed = true;
+      }
+      if (params.get('tab') !== activeTab) {
+        params.set('tab', activeTab);
+        changed = true;
+      }
+      if (changed) {
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({ ...window.history.state, view: currentView, tab: activeTab }, '', newUrl);
+      }
+    }
+  }, [currentView, activeTab]);
 
   // Local database session state
   const [reports, setReports] = useState<ReportItem[]>(INITIAL_REPORTS);
@@ -415,7 +460,13 @@ export default function App() {
           )}
 
           {currentView === 'social' && (
-            <SocialForum />
+            <SocialForum 
+              article={{
+                url: 'https://spf-dashboard.gov.sg/social',
+                id: 'spf-citizens-dashboard-social-v1',
+                title: 'Singapore Police Force Citizen Discussion Forum'
+              }}
+            />
           )}
         </div>
       </div>
