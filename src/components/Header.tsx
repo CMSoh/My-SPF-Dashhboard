@@ -37,6 +37,8 @@ export default function Header({
     } else if (tab === 'documents') {
       // Goes to the default document view which we can show inside apply/permits or special sections
       setCurrentView('apply_permits');
+    } else if (tab === 'social') {
+      setCurrentView('social');
     }
   };
 
@@ -135,7 +137,7 @@ export default function Header({
 
         {/* Desktop Main Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 h-full">
-          {(['services', 'traffic', 'licences', 'documents'] as MainTab[]).map((tab) => (
+          {(['services', 'traffic', 'licences', 'documents', 'social'] as MainTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabClick(tab)}

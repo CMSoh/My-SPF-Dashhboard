@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type MainTab = 'services' | 'traffic' | 'licences' | 'documents';
+export type MainTab = 'services' | 'traffic' | 'licences' | 'documents' | 'social';
 
 export type CurrentView = 
   | 'home'
@@ -13,7 +13,8 @@ export type CurrentView =
   | 'submit_info'
   | 'check_status'
   | 'book_appointment'
-  | 'practice_tests';
+  | 'practice_tests'
+  | 'social';
 
 export interface ReportItem {
   id: string;
