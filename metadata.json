@@ -1,0 +1,6 @@
+{
+  "name": "Singapore Police Force E-Services",
+  "description": "Access official Singapore Police Force e-services, security forms, licences, incident routing, appointment bookings, and driving theory practice portals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
